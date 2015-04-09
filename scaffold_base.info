@@ -1,0 +1,7 @@
+name = [todo] name
+description = [todo] description
+core = 7.x
+files[] = scaffold_base.module
+files[] = scaffold_base.install
+
+

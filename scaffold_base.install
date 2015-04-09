@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Installation file for the scaffold_base module.
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function scaffold_base_install() {
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function scaffold_base_uninstall() {
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function scaffold_base_schema() {
+  $schema = array();
+  include_once 'models/model_name.inc';
+  $schema['model_name_plural'] = ModelName::schema();
+  return $schema;
+}
+

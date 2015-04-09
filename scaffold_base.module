@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * @file scaffold_base.module
+ * Main file for the scaffold_base module.
+ *
+ */
+ 
+module_load_include('inc', 'scaffold_base', 'menu');
+
+module_load_include('inc', 'scaffold_base', 'theme/theme');
