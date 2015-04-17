@@ -7,8 +7,8 @@
 
 <ul class="actions">
   <li><?php echo l('Back','model_name_plural'); ?></li>
-  <li><?php echo l('View','model_name_plural/'.$model_name->lid); ?></li>
-  <li><?php echo l('Delete','model_name_plural/'.$model_name->lid.'/delete'); ?></li>
+  <li><?php echo l('View','model_name_plural/'.$model_name->primary_key_field); ?></li>
+  <li><?php echo l('Delete','model_name_plural/'.$model_name->primary_key_field.'/delete'); ?></li>
 </ul>
 
 

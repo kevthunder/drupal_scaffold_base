@@ -2,7 +2,7 @@
 	
   class ModelName {
     static function schema(){
-      require 'model_name.schema.inc'
+      require 'model_name.schema.inc';
       return $schema;
     }
     static function all(){
@@ -11,7 +11,6 @@
         ->execute();
       $model_name_plural = array();
       while($res = $results->fetchAssoc()){
-      // foreach($results as $res){
         $model_name_plural[] = new ModelName($res);
       }
       return $model_name_plural;
@@ -19,7 +18,7 @@
     static function find($id){
       $result = db_select('model_name_plural')
       ->fields('model_name_plural')
-      ->condition('lid', $id,'=')
+      ->condition('primary_key_field', $id,'=')
       ->execute()
       ->fetchAssoc();
       return new ModelName($result);
@@ -53,22 +52,22 @@
     }
     
     function save(){
-      if(empty($this->lid)){
-        $this->lid = db_insert('model_name_plural') 
+      if(empty($this->primary_key_field)){
+        $this->primary_key_field = db_insert('model_name_plural') 
           ->fields($this->data())
           ->execute();
       }else{
         $num_updated = db_update('model_name_plural') 
           ->fields($this->data())
-          ->condition('lid', $this->lid)
+          ->condition('primary_key_field', $this->primary_key_field)
           ->execute();
       }
     }
     
     function delete(){
-      if(!empty($this->lid)){
+      if(!empty($this->primary_key_field)){
         return db_delete('model_name_plural')
-          ->condition('lid', $this->lid)
+          ->condition('primary_key_field', $this->primary_key_field)
           ->execute();
       }
     }
