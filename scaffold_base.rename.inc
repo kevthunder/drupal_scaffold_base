@@ -9,7 +9,7 @@
     var $checkRendered = true;
     
     function model_name(){
-      return $this->process->prompt(array('prompt'=>'Model name','default'=>$this->process->dest_module),'model_name');
+      return $this->process->prompt(array('prompt'=>'Model name','default'=>$this->process->lastChoice('model_name',$this->process->dest_module)),'model_name');
     }
     
     var $types = array(
@@ -77,9 +77,10 @@
     
     function fields(){
       if(empty($this->process->choices['fields'])){
+        $lastFields = $this->process->lastChoice('fields',array());
         $this->process->choices['fields'] = array();
         $inflector = Inflector::get();
-        while($field = $this->process->prompt(array('prompt'=>'Choose a field to add or leave blank to continue'))) {
+        while($field = $this->process->prompt(array('prompt'=>'Choose a field to add or leave blank to continue','default'=>key($lastFields)))) {
           if($field == ''){ break; }
           list($field, $type) = explode(':',$field,2);
           $type = $this->parseFieldType($type);
@@ -88,12 +89,15 @@
             foreach($this->types as $name => $opt){
               $this->process->output(' - '.$name.(!empty($opt['alias'])?' ('.$opt['alias'].')':''));
             }
-            $type = $this->process->prompt(array('prompt'=>'Field '.$field.' type or "q" to cancel','default'=>'varchar'));
+            $defType = array_key_exists($field,$lastFields)?$lastFields[$field]['type']:'varchar';
+            $type = $this->process->prompt(array('prompt'=>'Field '.$field.' type or "q" to cancel','default'=>$defType));
             if($type == 'q'){ break 2; }
             $type = $this->parseFieldType($type);
           }
           if(empty($type['schema']['description'])) $type['schema']['description'] = $inflector->humanize($field);
           $this->process->choices['fields'][$field] = $type;
+          
+          next($lastFields);
         }
       }
       return $this->process->choices['fields'];
@@ -131,7 +135,7 @@
       $str=file_get_contents($file);
       $str=str_replace(array_keys($replacements), array_values($replacements),$str);
       
-      $str=$this->process->replace_promp('primary_key_field', array('prompt'=>'Primary key for you model','default'=>$model_name[0].'id'),$str,true);
+      $str=$this->process->replace_promp('primary_key_field', array('prompt'=>'Primary key for you model','default'=>$this->process->lastChoice('primary_key_field',$model_name[0].'id')),$str,true);
       file_put_contents($file, $str);
     }
   }
